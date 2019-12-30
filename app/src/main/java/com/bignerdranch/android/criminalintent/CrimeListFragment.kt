@@ -15,7 +15,7 @@ class CrimeListFragment: Fragment() {
 
     private lateinit var crimeRecyclerView: RecyclerView
     private val crimeListViewModel: CrimeListViewModel by lazy {
-        ViewModelProviders.of(this).get(crimeListViewModel::class.java)
+        ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -28,7 +28,7 @@ class CrimeListFragment: Fragment() {
 
         crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
         crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-        crimeRecyclerView.adapter = CrimeAdapter(emptyList())
+        crimeRecyclerView.adapter = CrimeAdapter(crimeListViewModel.crimes)
 
         return view
     }
