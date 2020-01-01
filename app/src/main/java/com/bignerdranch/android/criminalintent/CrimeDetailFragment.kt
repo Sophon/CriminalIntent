@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import java.util.*
 
+private const val ARG_CRIME_ID = "crime_id"
+
 class CrimeDetailFragment: Fragment() {
 
     private lateinit var crime: Crime
@@ -27,8 +29,8 @@ class CrimeDetailFragment: Fragment() {
         super.onCreate(savedInstanceState)
 
         crime = Crime()
-        //TODO: retrieve id
-        //TODO: querry DB
+
+        val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
     }
 
     override fun onCreateView(
@@ -53,8 +55,15 @@ class CrimeDetailFragment: Fragment() {
     }
 
     companion object {
+
         fun newInstance(crimeId: UUID): CrimeDetailFragment {
-            return CrimeDetailFragment()
+            val argBundle = Bundle().apply {
+                putSerializable(ARG_CRIME_ID, crimeId)
+            }
+
+            return CrimeDetailFragment().apply {
+                arguments = argBundle
+            }
         }
     }
 }
