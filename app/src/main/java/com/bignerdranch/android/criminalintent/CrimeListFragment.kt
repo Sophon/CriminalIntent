@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,14 +14,26 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment: Fragment() {
 
+    interface Callbacks {
+        fun onCrimeClicked(crimeId: UUID)
+    }
+
+    private var callback: Callbacks? = null
     private lateinit var crimeRecyclerView: RecyclerView
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        callback = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -52,7 +65,13 @@ class CrimeListFragment: Fragment() {
         )
     }
 
-    fun updateUI(crimes: List<Crime>) {
+    override fun onDetach() {
+        super.onDetach()
+
+        callback = null
+    }
+
+    private fun updateUI(crimes: List<Crime>) {
         crimeRecyclerView.adapter = CrimeAdapter(crimes)
     }
 
@@ -61,7 +80,6 @@ class CrimeListFragment: Fragment() {
             return CrimeListFragment()
         }
     }
-
 
     private inner class CrimeHolder(view: View)
         : RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -76,7 +94,7 @@ class CrimeListFragment: Fragment() {
         }
 
         override fun onClick(v: View?) {
-            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+            callback?.onCrimeClicked(crime.id)
         }
 
         fun bind(crime: Crime) {
