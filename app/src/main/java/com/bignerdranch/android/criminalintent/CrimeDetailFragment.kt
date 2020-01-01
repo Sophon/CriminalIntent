@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
@@ -31,6 +32,7 @@ class CrimeDetailFragment: Fragment() {
         crime = Crime()
 
         val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        crimeDetailViewModel.loadCrime(crimeId)
     }
 
     override fun onCreateView(
@@ -51,7 +53,24 @@ class CrimeDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        crimeDetailViewModel.crimeLiveData.observe(
+            viewLifecycleOwner,
+            Observer { crime ->
+                crime?.let {
+                    this.crime = crime
+                    updateUI()
+                }
+            }
+        )
+    }
 
+    private fun updateUI() {
+        titleField.setText(crime.title)
+        dateButton.text = crime.date.toString()
+        isSolvedCheckbox.apply {
+            isChecked = crime.isSolved
+            jumpDrawablesToCurrentState()
+        }
     }
 
     companion object {
