@@ -1,6 +1,8 @@
 package com.bignerdranch.android.criminalintent
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +64,41 @@ class CrimeDetailFragment: Fragment() {
                 }
             }
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val titleWatcher = object: TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int) {}
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int) {
+                crime.title = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) { }
+        }
+        titleField.addTextChangedListener(titleWatcher)
+
+        isSolvedCheckbox.apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                crime.isSolved = isChecked
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        crimeDetailViewModel.saveCrime(crime)
     }
 
     private fun updateUI() {
