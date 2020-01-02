@@ -2,8 +2,12 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity:
+    AppCompatActivity(),
+    CrimeListFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,5 +22,15 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+    }
+
+    override fun onCrimeClicked(crimeId: UUID) {
+        val crimeFragment = CrimeDetailFragment.newInstance(crimeId)
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, crimeFragment)
+            .addToBackStack("crime")
+            .commit()
     }
 }
