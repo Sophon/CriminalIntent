@@ -10,4 +10,15 @@ class Crime(
     var title: String = "",
     var date: Date = Date(),
     var isSolved: Boolean = false
-)
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if(other == null || other !is Crime) {
+            return false
+        }
+
+        return (title == other.title)
+                && (date == other.date)
+                && (isSolved == other.isSolved)
+    }
+}
