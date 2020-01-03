@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
+private const val DIALOG_DATE = "DialogDate"
 
 class CrimeDetailFragment: Fragment() {
 
@@ -91,6 +92,12 @@ class CrimeDetailFragment: Fragment() {
         isSolvedCheckbox.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
+            }
+        }
+
+        dateButton.setOnClickListener {
+            DatePickerFragment().apply {
+                show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_DATE)
             }
         }
     }
