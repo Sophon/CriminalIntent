@@ -16,10 +16,14 @@ import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
+private const val DIALOG_TIME = "DialogTime"
 private const val REQUEST_DATE = 0
+private const val REQUEST_TIME = 1
 
-class CrimeDetailFragment: Fragment(),
-    DatePickerFragment.Callbacks {
+class CrimeDetailFragment:
+    Fragment(),
+    DatePickerFragment.Callbacks,
+    TimePickerFragment.Callbacks {
 
     private lateinit var crime: Crime
     private lateinit var titleField: EditText
@@ -113,6 +117,17 @@ class CrimeDetailFragment: Fragment(),
 
     override fun onDateSelected(date: Date) {
         crime.date = date
+
+        TimePickerFragment.newInstance(Time.dateToTime(crime.date)).apply {
+            setTargetFragment(this@CrimeDetailFragment, REQUEST_TIME)
+            show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_TIME)
+        }
+    }
+
+    override fun onTimeSelected(time: Time) {
+        crime.date = Time.addTimeToDate(crime.date, time)
+
+        updateUI()
     }
 
     private fun updateUI() {
