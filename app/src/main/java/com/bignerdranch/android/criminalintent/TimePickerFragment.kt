@@ -27,7 +27,7 @@ class TimePickerFragment: DialogFragment() {
         }
 
         val calendar = Calendar.getInstance()
-        val initialHour = calendar.get(Calendar.HOUR)
+        val initialHour = calendar.get(Calendar.HOUR_OF_DAY)
         val initialMinute = calendar.get(Calendar.MINUTE)
 
         return TimePickerDialog(
