@@ -15,6 +15,8 @@ class TimePickerFragment: DialogFragment() {
         fun onTimeSelected(time: Time)
     }
 
+    //==========
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val timeListener = TimePickerDialog.OnTimeSetListener {
                 _: TimePicker, hour: Int, minute: Int ->
@@ -38,6 +40,8 @@ class TimePickerFragment: DialogFragment() {
             true
         )
     }
+
+    //==========
 
     companion object {
         fun newInstance(time: Time): TimePickerFragment {
