@@ -15,6 +15,8 @@ class DatePickerFragment: DialogFragment() {
         fun onDateSelected(date: Date)
     }
 
+    //==========
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dateListener = DatePickerDialog.OnDateSetListener {
                 _: DatePicker, year: Int, month: Int, day: Int ->
@@ -41,6 +43,8 @@ class DatePickerFragment: DialogFragment() {
             initialDay
         )
     }
+
+    //==========
 
     companion object {
 

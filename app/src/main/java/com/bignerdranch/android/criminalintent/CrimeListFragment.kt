@@ -24,11 +24,15 @@ class CrimeListFragment: Fragment() {
         fun onCrimeClicked(crimeId: UUID)
     }
 
+    //==========
+
     private var callback: Callbacks? = null
     private lateinit var crimeRecyclerView: RecyclerView
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
     }
+
+    //==========
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -95,15 +99,21 @@ class CrimeListFragment: Fragment() {
         }
     }
 
+    //==========
+
     private fun updateUI(crimes: List<Crime>) {
         (crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
     }
+
+    //==========
 
     companion object {
         fun newInstance(): CrimeListFragment {
             return CrimeListFragment()
         }
     }
+
+    //==========
 
     private inner class CrimeHolder(view: View)
         : RecyclerView.ViewHolder(view), View.OnClickListener {

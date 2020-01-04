@@ -24,6 +24,8 @@ class MainActivity:
         }
     }
 
+    //==========
+
     override fun onCrimeClicked(crimeId: UUID) {
         val crimeFragment = CrimeDetailFragment.newInstance(crimeId)
 
