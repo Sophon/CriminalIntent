@@ -35,6 +35,8 @@ class CrimeDetailFragment:
             .get(CrimeDetailViewModel::class.java)
     }
 
+    //==========
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -130,6 +132,8 @@ class CrimeDetailFragment:
         updateUI()
     }
 
+    //==========
+
     private fun updateUI() {
         titleField.setText(crime.title)
         dateButton.text = crime.date.toString()
@@ -138,6 +142,8 @@ class CrimeDetailFragment:
             jumpDrawablesToCurrentState()
         }
     }
+
+    //==========
 
     companion object {
 
