@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,8 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 private const val TAG = "CrimeListFragment"
+private const val DIALOG_EMPTY = "empty"
+private const val REQUEST_EMPTY = 0
+private const val KEY_DIALOG = "dialog"
 
-class CrimeListFragment: Fragment() {
+class CrimeListFragment:
+    Fragment(),
+    EmptyAlertFragment.Callbacks {
 
     interface Callbacks {
         fun onCrimeClicked(crimeId: UUID)
@@ -44,6 +48,8 @@ class CrimeListFragment: Fragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+        crimeListViewModel.emptyDialogShown =
+            savedInstanceState?.getBoolean(KEY_DIALOG, false) ?: false
     }
 
     override fun onCreateView(
@@ -69,6 +75,9 @@ class CrimeListFragment: Fragment() {
             Observer { crimes ->
                 crimes?.let {
                     Log.i(TAG, "Retrieved ${crimes.size} crimes.")
+                    if(crimes.isEmpty() && !crimeListViewModel.emptyDialogShown) {
+                        showEmptyDialog()
+                    }
                     updateUI(crimes)
                 }
             }
@@ -90,19 +99,41 @@ class CrimeListFragment: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.new_crime -> {
-                val crime = Crime()
-                crimeListViewModel.addCrime(crime)
-                callback?.onCrimeClicked(crime.id)
+                createNewCrime()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean(KEY_DIALOG, crimeListViewModel.emptyDialogShown)
+    }
+
+    override fun onCreateSelected() = createNewCrime()
+
     //==========
 
     private fun updateUI(crimes: List<Crime>) {
         (crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
+    }
+
+    private fun showEmptyDialog() {
+        EmptyAlertFragment.newInstance().apply {
+            setTargetFragment(this@CrimeListFragment, REQUEST_EMPTY)
+            show(this@CrimeListFragment.requireFragmentManager(), DIALOG_EMPTY)
+        }
+
+        crimeListViewModel.emptyDialogShown = true
+    }
+
+    private fun createNewCrime() {
+        val crime = Crime()
+        crimeListViewModel.addCrime(crime)
+        callback?.onCrimeClicked(crime.id)
+        Log.d(TAG, "new crime added")
     }
 
     //==========
