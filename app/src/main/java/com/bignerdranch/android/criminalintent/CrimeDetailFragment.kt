@@ -1,8 +1,10 @@
 package com.bignerdranch.android.criminalintent
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +22,8 @@ private const val DIALOG_TIME = "DialogTime"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
 
+private const val DATE_FORMAT = "EEE, MMM, dd"
+
 class CrimeDetailFragment:
     Fragment(),
     DatePickerFragment.Callbacks,
@@ -29,6 +33,8 @@ class CrimeDetailFragment:
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
     private lateinit var isSolvedCheckbox: CheckBox
+    private lateinit var sendReportButton: Button
+
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders
             .of(this)
@@ -51,12 +57,14 @@ class CrimeDetailFragment:
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view =
             inflater.inflate(R.layout.fragment_crime_detail, container, false)
 
         titleField = view.findViewById(R.id.crime_title)
         dateButton = view.findViewById(R.id.crime_date)
         isSolvedCheckbox = view.findViewById(R.id.crime_solved)
+        sendReportButton = view.findViewById(R.id.crime_send_report)
 
         return view
     }
@@ -107,6 +115,20 @@ class CrimeDetailFragment:
             DatePickerFragment.newInstance(crime.date).apply {
                 setTargetFragment(this@CrimeDetailFragment, REQUEST_DATE)
                 show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_DATE)
+            }
+        }
+
+        sendReportButton.setOnClickListener {
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+
+                putExtra(Intent.EXTRA_TEXT, getCrimeReport())
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
+            }.also { intent ->
+                val sendReportChooserIntent =
+                    Intent.createChooser(intent, getString(R.string.send_report_prompt))
+
+                startActivity(sendReportChooserIntent)
             }
         }
     }
