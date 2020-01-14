@@ -1,7 +1,10 @@
 package com.bignerdranch.android.criminalintent
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
@@ -21,6 +24,7 @@ private const val DIALOG_DATE = "DialogDate"
 private const val DIALOG_TIME = "DialogTime"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
+private const val REQUEST_CONTACT = 2
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -34,6 +38,7 @@ class CrimeDetailFragment:
     private lateinit var dateButton: Button
     private lateinit var isSolvedCheckbox: CheckBox
     private lateinit var sendReportButton: Button
+    private lateinit var chooseSuspectButton: Button
 
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders
@@ -65,6 +70,7 @@ class CrimeDetailFragment:
         dateButton = view.findViewById(R.id.crime_date)
         isSolvedCheckbox = view.findViewById(R.id.crime_solved)
         sendReportButton = view.findViewById(R.id.crime_send_report)
+        chooseSuspectButton = view.findViewById(R.id.crime_choose_suspect)
 
         return view
     }
@@ -115,6 +121,26 @@ class CrimeDetailFragment:
             DatePickerFragment.newInstance(crime.date).apply {
                 setTargetFragment(this@CrimeDetailFragment, REQUEST_DATE)
                 show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_DATE)
+            }
+        }
+
+        chooseSuspectButton.apply {
+            val chooseSuspectIntent = Intent(
+                Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI
+            )
+
+            val packageManager: PackageManager = requireActivity().packageManager
+            val resolveInfo: ResolveInfo? = packageManager.resolveActivity(
+                chooseSuspectIntent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
+            if(resolveInfo == null) {
+                isEnabled = false
+            }
+
+            setOnClickListener {
+                startActivityForResult(chooseSuspectIntent, REQUEST_CONTACT)
             }
         }
 
