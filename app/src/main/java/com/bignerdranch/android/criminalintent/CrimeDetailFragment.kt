@@ -41,6 +41,7 @@ class CrimeDetailFragment:
     private lateinit var photoFile: File
     private lateinit var photoFileUri: Uri
 
+    private lateinit var photoView: ImageView
     private lateinit var photoButton: ImageButton
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
@@ -75,6 +76,7 @@ class CrimeDetailFragment:
         val view =
             inflater.inflate(R.layout.fragment_crime_detail, container, false)
 
+        photoView = view.findViewById(R.id.crime_photo)
         photoButton = view.findViewById(R.id.crime_camera)
         titleField = view.findViewById(R.id.crime_title)
         dateButton = view.findViewById(R.id.crime_date)
@@ -253,7 +255,7 @@ class CrimeDetailFragment:
 
             requestCode == REQUEST_CAMERA -> {
                 revokeWritingPermissions()
-                //TODO: display the photo
+                updatePhotoView()
             }
         }
     }
@@ -288,6 +290,8 @@ class CrimeDetailFragment:
         if(crime.suspect.isNotEmpty()) {
             chooseSuspectButton.text = crime.suspect
         }
+
+        updatePhotoView()
     }
 
     private fun getCrimeReport(): String {
@@ -315,6 +319,15 @@ class CrimeDetailFragment:
             photoFileUri,
             Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         )
+    }
+
+    private fun updatePhotoView() {
+        if(photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoView.setImageBitmap(bitmap)
+        } else {
+            photoView.setImageDrawable(null)
+        }
     }
 
     //==========
