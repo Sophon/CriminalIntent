@@ -7,15 +7,14 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
+import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +28,7 @@ private const val DIALOG_TIME = "DialogTime"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
 private const val REQUEST_CONTACT = 2
+private const val REQUEST_CAMERA = 3
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -41,6 +41,7 @@ class CrimeDetailFragment:
     private lateinit var photoFile: File
     private lateinit var photoFileUri: Uri
 
+    private lateinit var photoButton: ImageButton
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
     private lateinit var isSolvedCheckbox: CheckBox
@@ -74,6 +75,7 @@ class CrimeDetailFragment:
         val view =
             inflater.inflate(R.layout.fragment_crime_detail, container, false)
 
+        photoButton = view.findViewById(R.id.crime_camera)
         titleField = view.findViewById(R.id.crime_title)
         dateButton = view.findViewById(R.id.crime_date)
         isSolvedCheckbox = view.findViewById(R.id.crime_solved)
@@ -91,6 +93,7 @@ class CrimeDetailFragment:
             Observer { crime ->
                 crime?.let {
                     this.crime = crime
+
                     photoFile = crimeDetailViewModel.getPhotoFile(crime)
                     photoFileUri = FileProvider.getUriForFile(
                         requireActivity(),
@@ -106,6 +109,39 @@ class CrimeDetailFragment:
 
     override fun onStart() {
         super.onStart()
+
+        photoButton.apply {
+            val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            val packageManager: PackageManager = requireActivity().packageManager
+            val resolveInfo: ResolveInfo? = packageManager.resolveActivity(
+                takePhotoIntent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
+
+            if(resolveInfo == null) {
+                isEnabled = true
+            }
+
+            setOnClickListener {
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoFileUri)
+
+                val photoActivities = packageManager
+                    .queryIntentActivities(
+                        takePhotoIntent,
+                        PackageManager.MATCH_DEFAULT_ONLY
+                    )
+                for(photoActivity in photoActivities) {
+                    requireActivity().grantUriPermission(
+                        photoActivity.activityInfo.packageName,
+                        photoFileUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                }
+
+                startActivityForResult(takePhotoIntent, REQUEST_CAMERA)
+            }
+        }
 
         val titleWatcher = object: TextWatcher {
             override fun beforeTextChanged(
@@ -150,6 +186,7 @@ class CrimeDetailFragment:
                 chooseSuspectIntent,
                 PackageManager.MATCH_DEFAULT_ONLY
             )
+
             if(resolveInfo == null) {
                 isEnabled = false
             }
@@ -206,6 +243,11 @@ class CrimeDetailFragment:
 
                 crimeDetailViewModel.saveCrime(crime)
                 chooseSuspectButton.text = crime.suspect
+            }
+
+            requestCode == REQUEST_CAMERA -> {
+                //TODO: revoke writing permission
+                //TODO: display the photo
             }
         }
     }
