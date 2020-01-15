@@ -1,8 +1,10 @@
 package com.bignerdranch.android.criminalintent
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.Editable
@@ -165,6 +167,36 @@ class CrimeDetailFragment:
         crimeDetailViewModel.saveCrime(crime)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when{
+            resultCode != Activity.RESULT_OK -> return
+
+            requestCode == REQUEST_CONTACT && data != null -> {
+                val contactUri: Uri? = data.data
+
+                //specify which fields we want our query to return
+                val queryFields = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+
+                //perform query
+                val cursor = requireActivity().contentResolver
+                    .query(contactUri, queryFields, null, null, null)
+
+                cursor?.use {
+                    //verify cursor has >= 1 result
+                    if(it.count == 0) return
+
+                    //pull out first col first row (suspect)
+                    it.moveToFirst()
+                    val suspect = it.getString(0)
+                    crime.suspect = suspect
+                }
+
+                crimeDetailViewModel.saveCrime(crime)
+                chooseSuspectButton.text = crime.suspect
+            }
+        }
+    }
+
     override fun onDateSelected(date: Date) {
         crime.date = date
 
@@ -184,10 +216,16 @@ class CrimeDetailFragment:
 
     private fun updateUI() {
         titleField.setText(crime.title)
+
         dateButton.text = crime.date.toString()
+
         isSolvedCheckbox.apply {
             isChecked = crime.isSolved
             jumpDrawablesToCurrentState()
+        }
+
+        if(crime.suspect.isNotEmpty()) {
+            chooseSuspectButton.text = crime.suspect
         }
     }
 
