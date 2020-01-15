@@ -217,6 +217,12 @@ class CrimeDetailFragment:
         crimeDetailViewModel.saveCrime(crime)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+        revokeWritingPermissions()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when{
             resultCode != Activity.RESULT_OK -> return
@@ -246,7 +252,7 @@ class CrimeDetailFragment:
             }
 
             requestCode == REQUEST_CAMERA -> {
-                //TODO: revoke writing permission
+                revokeWritingPermissions()
                 //TODO: display the photo
             }
         }
@@ -301,6 +307,13 @@ class CrimeDetailFragment:
         return getString(
             R.string.crime_report,
             crime.title, dateString, solvedString, suspectString
+        )
+    }
+
+    private fun revokeWritingPermissions() {
+        requireActivity().revokeUriPermission(
+            photoFileUri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         )
     }
 
