@@ -13,6 +13,11 @@ class Crime(
     var suspect: String = ""
 ) {
 
+    val photoFileName
+        get() = "IMG_$id.jpg"
+
+    //==========
+
     override fun equals(other: Any?): Boolean {
         if(other == null || other !is Crime) {
             return false

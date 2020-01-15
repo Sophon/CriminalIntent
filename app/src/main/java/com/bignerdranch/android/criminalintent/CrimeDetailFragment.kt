@@ -16,9 +16,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
+import java.io.File
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
@@ -36,11 +38,15 @@ class CrimeDetailFragment:
     TimePickerFragment.Callbacks {
 
     private lateinit var crime: Crime
+    private lateinit var photoFile: File
+    private lateinit var photoFileUri: Uri
+
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
     private lateinit var isSolvedCheckbox: CheckBox
     private lateinit var sendReportButton: Button
     private lateinit var chooseSuspectButton: Button
+
 
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders
@@ -85,6 +91,13 @@ class CrimeDetailFragment:
             Observer { crime ->
                 crime?.let {
                     this.crime = crime
+                    photoFile = crimeDetailViewModel.getPhotoFile(crime)
+                    photoFileUri = FileProvider.getUriForFile(
+                        requireActivity(),
+                        "com.bignerdranch.android.criminalintent.fileprovider",
+                        photoFile
+                    )
+
                     updateUI()
                 }
             }
