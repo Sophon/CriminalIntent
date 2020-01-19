@@ -322,7 +322,7 @@ class CrimeDetailFragment:
         val suspectString = if(crime.suspect.isBlank()) {
             getString(R.string.crime_report_no_suspect)
         } else {
-            getString(R.string.crime_detail_suspect_text)
+            getString(R.string.crime_report_suspect, crime.suspect)
         }
 
         return getString(
