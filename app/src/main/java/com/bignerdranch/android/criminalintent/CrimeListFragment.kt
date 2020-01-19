@@ -151,8 +151,9 @@ class CrimeListFragment:
 
         private lateinit var crime: Crime
         private val titleTextView = itemView.findViewById<TextView>(R.id.crime_title)
-        private val dateTextView = itemView.findViewById<TextView>(R.id.crime_date)
-        private val solvedImageView = itemView.findViewById<ImageView>(R.id.crime_solved)
+        private val dateTextView = itemView.findViewById<TextView>(R.id.crime_detail_date)
+        private val solvedImageView =
+            itemView.findViewById<ImageView>(R.id.crime_detail_solved)
 
         init {
             itemView.setOnClickListener(this)
