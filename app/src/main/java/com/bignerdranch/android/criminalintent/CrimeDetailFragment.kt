@@ -25,10 +25,12 @@ import java.util.*
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
 private const val DIALOG_TIME = "DialogTime"
+private const val DIALOG_IMAGE = "DialogImage"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
 private const val REQUEST_CONTACT = 2
 private const val REQUEST_CAMERA = 3
+private const val REQUEST_IMAGE = 4
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -111,6 +113,13 @@ class CrimeDetailFragment:
 
     override fun onStart() {
         super.onStart()
+
+        photoView.setOnClickListener {
+            ImageFragment.newInstance(photoFile).apply {
+                setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
+                show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+            }
+        }
 
         photoButton.apply {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
