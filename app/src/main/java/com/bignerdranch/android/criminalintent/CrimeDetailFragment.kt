@@ -115,9 +115,17 @@ class CrimeDetailFragment:
         super.onStart()
 
         photoView.setOnClickListener {
-            ImageFragment.newInstance(photoFile).apply {
-                setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
-                show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+            if(photoFile.exists()) {
+                ImageFragment.newInstance(photoFile).apply {
+                    setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
+                    show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "no photo available",
+                    Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
