@@ -297,7 +297,13 @@ class CrimeDetailFragment:
     private fun updateUI() {
         titleField.setText(crime.title)
 
-        dateButton.text = crime.date.toString()
+        dateButton.text =
+            java.text.DateFormat
+                .getDateTimeInstance(
+                    java.text.DateFormat.LONG,
+                    java.text.DateFormat.MEDIUM
+                )
+                .format(crime.date)
 
         isSolvedCheckbox.apply {
             isChecked = crime.isSolved
