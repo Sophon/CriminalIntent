@@ -78,13 +78,13 @@ class CrimeDetailFragment:
         val view =
             inflater.inflate(R.layout.fragment_crime_detail, container, false)
 
-        photoView = view.findViewById(R.id.crime_photo)
-        photoButton = view.findViewById(R.id.crime_camera)
+        photoView = view.findViewById(R.id.crime_detail_photo)
+        photoButton = view.findViewById(R.id.crime_detail_camera)
         titleField = view.findViewById(R.id.crime_title)
-        dateButton = view.findViewById(R.id.crime_date)
-        isSolvedCheckbox = view.findViewById(R.id.crime_solved)
-        sendReportButton = view.findViewById(R.id.crime_send_report)
-        chooseSuspectButton = view.findViewById(R.id.crime_choose_suspect)
+        dateButton = view.findViewById(R.id.crime_detail_date)
+        isSolvedCheckbox = view.findViewById(R.id.crime_detail_solved)
+        sendReportButton = view.findViewById(R.id.crime_detail_send_report)
+        chooseSuspectButton = view.findViewById(R.id.crime_detail_choose_suspect)
 
         return view
     }
@@ -322,7 +322,7 @@ class CrimeDetailFragment:
         val suspectString = if(crime.suspect.isBlank()) {
             getString(R.string.crime_report_no_suspect)
         } else {
-            getString(R.string.crime_suspect_text)
+            getString(R.string.crime_detail_suspect_text)
         }
 
         return getString(
