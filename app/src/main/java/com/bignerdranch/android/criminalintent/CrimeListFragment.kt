@@ -165,13 +165,35 @@ class CrimeListFragment:
 
         fun bind(crime: Crime) {
             this.crime = crime
+
             titleTextView.text = crime.title
-            dateTextView.text = crime.date.toString()
+            dateTextView.text = getDateString(crime.date)
             solvedImageView.visibility = if(crime.isSolved) {
                 View.VISIBLE
             } else {
                 View.GONE
             }
+        }
+
+        fun getDateString(date: Date): String {
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            val dayOfWeek = calendar.getDisplayName(
+                Calendar.DAY_OF_WEEK,
+                Calendar.SHORT,
+                Locale.getDefault()
+            )
+
+            val formattedDate =
+                java.text.DateFormat
+                    .getDateTimeInstance(
+                        java.text.DateFormat.MEDIUM,
+                        java.text.DateFormat.SHORT
+                    )
+                    .format(date)
+
+            return "$dayOfWeek, $formattedDate"
         }
     }
 
