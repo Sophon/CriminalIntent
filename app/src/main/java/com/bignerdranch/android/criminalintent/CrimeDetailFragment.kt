@@ -184,6 +184,11 @@ class CrimeDetailFragment:
         isSolvedCheckbox.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
+                contentDescription = if(crime.isSolved) {
+                    getString(R.string.crime_solved_description)
+                } else {
+                    getString(R.string.crime_not_solved_description)
+                }
             }
         }
 
