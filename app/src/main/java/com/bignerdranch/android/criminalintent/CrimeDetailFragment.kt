@@ -348,8 +348,12 @@ class CrimeDetailFragment:
         if(photoFile.exists()) {
             val bitmap = getScaledBitmap(photoFile.path, requireActivity())
             photoView.setImageBitmap(bitmap)
+            photoView.contentDescription =
+                getString(R.string.crime_photo_image_description)
         } else {
             photoView.setImageDrawable(null)
+            photoView.contentDescription =
+                getString(R.string.crime_photo_no_image_description)
         }
     }
 
