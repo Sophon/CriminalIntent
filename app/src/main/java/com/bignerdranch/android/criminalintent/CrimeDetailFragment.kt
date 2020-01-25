@@ -25,10 +25,12 @@ import java.util.*
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
 private const val DIALOG_TIME = "DialogTime"
+private const val DIALOG_IMAGE = "DialogImage"
 private const val REQUEST_DATE = 0
 private const val REQUEST_TIME = 1
 private const val REQUEST_CONTACT = 2
 private const val REQUEST_CAMERA = 3
+private const val REQUEST_IMAGE = 4
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
@@ -76,13 +78,13 @@ class CrimeDetailFragment:
         val view =
             inflater.inflate(R.layout.fragment_crime_detail, container, false)
 
-        photoView = view.findViewById(R.id.crime_photo)
-        photoButton = view.findViewById(R.id.crime_camera)
+        photoView = view.findViewById(R.id.crime_detail_photo)
+        photoButton = view.findViewById(R.id.crime_detail_camera)
         titleField = view.findViewById(R.id.crime_title)
-        dateButton = view.findViewById(R.id.crime_date)
-        isSolvedCheckbox = view.findViewById(R.id.crime_solved)
-        sendReportButton = view.findViewById(R.id.crime_send_report)
-        chooseSuspectButton = view.findViewById(R.id.crime_choose_suspect)
+        dateButton = view.findViewById(R.id.crime_detail_date)
+        isSolvedCheckbox = view.findViewById(R.id.crime_detail_solved)
+        sendReportButton = view.findViewById(R.id.crime_detail_send_report)
+        chooseSuspectButton = view.findViewById(R.id.crime_detail_choose_suspect)
 
         return view
     }
@@ -111,6 +113,21 @@ class CrimeDetailFragment:
 
     override fun onStart() {
         super.onStart()
+
+        photoView.setOnClickListener {
+            if(photoFile.exists()) {
+                ImageFragment.newInstance(photoFile).apply {
+                    setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
+                    show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "no photo available",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
 
         photoButton.apply {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -167,6 +184,11 @@ class CrimeDetailFragment:
         isSolvedCheckbox.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
+                contentDescription = if(crime.isSolved) {
+                    getString(R.string.crime_solved_description)
+                } else {
+                    getString(R.string.crime_not_solved_description)
+                }
             }
         }
 
@@ -280,7 +302,13 @@ class CrimeDetailFragment:
     private fun updateUI() {
         titleField.setText(crime.title)
 
-        dateButton.text = crime.date.toString()
+        dateButton.text =
+            java.text.DateFormat
+                .getDateTimeInstance(
+                    java.text.DateFormat.LONG,
+                    java.text.DateFormat.MEDIUM
+                )
+                .format(crime.date)
 
         isSolvedCheckbox.apply {
             isChecked = crime.isSolved
@@ -305,7 +333,7 @@ class CrimeDetailFragment:
         val suspectString = if(crime.suspect.isBlank()) {
             getString(R.string.crime_report_no_suspect)
         } else {
-            getString(R.string.crime_suspect_text)
+            getString(R.string.crime_report_suspect, crime.suspect)
         }
 
         return getString(
@@ -325,8 +353,12 @@ class CrimeDetailFragment:
         if(photoFile.exists()) {
             val bitmap = getScaledBitmap(photoFile.path, requireActivity())
             photoView.setImageBitmap(bitmap)
+            photoView.contentDescription =
+                getString(R.string.crime_photo_image_description)
         } else {
             photoView.setImageDrawable(null)
+            photoView.contentDescription =
+                getString(R.string.crime_photo_no_image_description)
         }
     }
 

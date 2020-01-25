@@ -151,8 +151,9 @@ class CrimeListFragment:
 
         private lateinit var crime: Crime
         private val titleTextView = itemView.findViewById<TextView>(R.id.crime_title)
-        private val dateTextView = itemView.findViewById<TextView>(R.id.crime_date)
-        private val solvedImageView = itemView.findViewById<ImageView>(R.id.crime_solved)
+        private val dateTextView = itemView.findViewById<TextView>(R.id.crime_detail_date)
+        private val solvedImageView =
+            itemView.findViewById<ImageView>(R.id.crime_detail_solved)
 
         init {
             itemView.setOnClickListener(this)
@@ -164,13 +165,35 @@ class CrimeListFragment:
 
         fun bind(crime: Crime) {
             this.crime = crime
+
             titleTextView.text = crime.title
-            dateTextView.text = crime.date.toString()
+            dateTextView.text = getDateString(crime.date)
             solvedImageView.visibility = if(crime.isSolved) {
                 View.VISIBLE
             } else {
                 View.GONE
             }
+        }
+
+        fun getDateString(date: Date): String {
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            val dayOfWeek = calendar.getDisplayName(
+                Calendar.DAY_OF_WEEK,
+                Calendar.SHORT,
+                Locale.getDefault()
+            )
+
+            val formattedDate =
+                java.text.DateFormat
+                    .getDateTimeInstance(
+                        java.text.DateFormat.MEDIUM,
+                        java.text.DateFormat.SHORT
+                    )
+                    .format(date)
+
+            return "$dayOfWeek, $formattedDate"
         }
     }
 
