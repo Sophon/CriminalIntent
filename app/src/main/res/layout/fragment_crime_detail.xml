@@ -28,7 +28,8 @@
                 android:id="@+id/crime_detail_camera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_camera"/>
+                android:src="@drawable/ic_menu_camera"
+                android:contentDescription="@string/crime_photo_button_description" />
         </LinearLayout>
 
         <LinearLayout
