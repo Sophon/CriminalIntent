@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import java.util.*
 
 private const val TAG = "CrimeListFragment"
@@ -31,7 +33,8 @@ class CrimeListFragment:
     //==========
 
     private var callback: Callbacks? = null
-    private lateinit var crimeRecyclerView: RecyclerView
+//    private lateinit var crimeRecyclerView: RecyclerView
+    private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
     }
@@ -58,13 +61,20 @@ class CrimeListFragment:
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+//        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+//
+//        crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
+//        crimeRecyclerView.layoutManager = LinearLayoutManager(context)
+//        crimeRecyclerView.adapter = CrimeListAdapter()
 
-        crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
-        crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-        crimeRecyclerView.adapter = CrimeListAdapter()
+        binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
-        return view
+        binding.crimeRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = CrimeListAdapter()
+        }
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,7 +127,9 @@ class CrimeListFragment:
     //==========
 
     private fun updateUI(crimes: List<Crime>) {
-        (crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
+//        (crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
+        (binding.crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
+
     }
 
     private fun showEmptyDialog() {
