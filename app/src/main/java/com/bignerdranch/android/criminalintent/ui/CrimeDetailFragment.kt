@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -19,6 +19,10 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
+import com.bignerdranch.android.criminalintent.*
+import com.bignerdranch.android.criminalintent.Model.Crime
+import com.bignerdranch.android.criminalintent.Model.Time
+import com.bignerdranch.android.criminalintent.Utils.getScaledBitmap
 import java.io.File
 import java.util.*
 
@@ -116,9 +120,15 @@ class CrimeDetailFragment:
 
         photoView.setOnClickListener {
             if(photoFile.exists()) {
-                ImageFragment.newInstance(photoFile).apply {
-                    setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
-                    show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+                ImageFragment.newInstance(
+                    photoFile
+                ).apply {
+                    setTargetFragment(this@CrimeDetailFragment,
+                        REQUEST_IMAGE
+                    )
+                    show(this@CrimeDetailFragment.requireFragmentManager(),
+                        DIALOG_IMAGE
+                    )
                 }
             } else {
                 Toast.makeText(
@@ -158,7 +168,9 @@ class CrimeDetailFragment:
                     )
                 }
 
-                startActivityForResult(takePhotoIntent, REQUEST_CAMERA)
+                startActivityForResult(takePhotoIntent,
+                    REQUEST_CAMERA
+                )
             }
         }
 
@@ -193,9 +205,15 @@ class CrimeDetailFragment:
         }
 
         dateButton.setOnClickListener {
-            DatePickerFragment.newInstance(crime.date).apply {
-                setTargetFragment(this@CrimeDetailFragment, REQUEST_DATE)
-                show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_DATE)
+            DatePickerFragment.newInstance(
+                crime.date
+            ).apply {
+                setTargetFragment(this@CrimeDetailFragment,
+                    REQUEST_DATE
+                )
+                show(this@CrimeDetailFragment.requireFragmentManager(),
+                    DIALOG_DATE
+                )
             }
         }
 
@@ -216,7 +234,9 @@ class CrimeDetailFragment:
             }
 
             setOnClickListener {
-                startActivityForResult(chooseSuspectIntent, REQUEST_CONTACT)
+                startActivityForResult(chooseSuspectIntent,
+                    REQUEST_CONTACT
+                )
             }
         }
 
@@ -285,9 +305,15 @@ class CrimeDetailFragment:
     override fun onDateSelected(date: Date) {
         crime.date = date
 
-        TimePickerFragment.newInstance(Time.dateToTime(crime.date)).apply {
-            setTargetFragment(this@CrimeDetailFragment, REQUEST_TIME)
-            show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_TIME)
+        TimePickerFragment.newInstance(
+            Time.dateToTime(crime.date)
+        ).apply {
+            setTargetFragment(this@CrimeDetailFragment,
+                REQUEST_TIME
+            )
+            show(this@CrimeDetailFragment.requireFragmentManager(),
+                DIALOG_TIME
+            )
         }
     }
 
@@ -351,7 +377,11 @@ class CrimeDetailFragment:
 
     private fun updatePhotoView() {
         if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            val bitmap =
+                getScaledBitmap(
+                    photoFile.path,
+                    requireActivity()
+                )
             photoView.setImageBitmap(bitmap)
             photoView.contentDescription =
                 getString(R.string.crime_photo_image_description)
@@ -371,7 +401,8 @@ class CrimeDetailFragment:
                 putSerializable(ARG_CRIME_ID, crimeId)
             }
 
-            return CrimeDetailFragment().apply {
+            return CrimeDetailFragment()
+                .apply {
                 arguments = argBundle
             }
         }

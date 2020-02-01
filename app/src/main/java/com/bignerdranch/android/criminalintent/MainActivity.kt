@@ -2,7 +2,8 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bignerdranch.android.criminalintent.ui.CrimeDetailFragment
+import com.bignerdranch.android.criminalintent.ui.CrimeListFragment
 import java.util.*
 
 class MainActivity:

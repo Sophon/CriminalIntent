@@ -1,9 +1,11 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
+import com.bignerdranch.android.criminalintent.R
+import com.bignerdranch.android.criminalintent.Utils.getScaledBitmap
 import java.io.File
 
 private const val ARG_FILE = "file"
@@ -23,7 +25,11 @@ class ImageFragment: DialogFragment() {
         photoView = dialog.findViewById(R.id.crime_photo_zoomed)
 
         if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            val bitmap =
+                getScaledBitmap(
+                    photoFile.path,
+                    requireActivity()
+                )
             photoView.setImageBitmap(bitmap)
         } else {
             photoView.setImageBitmap(null)

@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,6 +13,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.criminalintent.CrimeListViewModel
+import com.bignerdranch.android.criminalintent.EmptyAlertFragment
+import com.bignerdranch.android.criminalintent.Model.Crime
+import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
 import java.util.*
 
@@ -133,9 +136,14 @@ class CrimeListFragment:
     }
 
     private fun showEmptyDialog() {
-        EmptyAlertFragment.newInstance().apply {
-            setTargetFragment(this@CrimeListFragment, REQUEST_EMPTY)
-            show(this@CrimeListFragment.requireFragmentManager(), DIALOG_EMPTY)
+        EmptyAlertFragment.newInstance()
+            .apply {
+            setTargetFragment(this@CrimeListFragment,
+                REQUEST_EMPTY
+            )
+            show(this@CrimeListFragment.requireFragmentManager(),
+                DIALOG_EMPTY
+            )
         }
 
         crimeListViewModel.emptyDialogShown = true
