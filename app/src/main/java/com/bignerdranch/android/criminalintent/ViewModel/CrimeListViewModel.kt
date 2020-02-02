@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ViewModel
 
 import androidx.lifecycle.ViewModel
 import com.bignerdranch.android.criminalintent.Model.Crime

@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.criminalintent.CrimeListViewModel
-import com.bignerdranch.android.criminalintent.EmptyAlertFragment
+import com.bignerdranch.android.criminalintent.ViewModel.CrimeListViewModel
 import com.bignerdranch.android.criminalintent.Model.Crime
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding

@@ -1,8 +1,7 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 
