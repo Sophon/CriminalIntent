@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,6 +18,8 @@ import com.bignerdranch.android.criminalintent.viewModel.CrimeListViewModel
 import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
+import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeBinding
+import com.bignerdranch.android.criminalintent.viewModel.CrimeViewModel
 import java.util.*
 
 private const val TAG = "CrimeListFragment"
@@ -216,6 +219,21 @@ class CrimeListFragment:
         }
     }
 
+    private inner class CrimeHolderMVVM(private val binding: ListItemCrimeBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.viewModel = CrimeViewModel()
+        }
+
+        fun bind(crime: Crime) {
+            binding.apply {
+                viewModel?.crime = crime
+                executePendingBindings()
+            }
+        }
+    }
+
     private inner class CrimeListAdapter
         : ListAdapter<Crime, CrimeHolder>(DiffCallback()) {
 
@@ -226,6 +244,25 @@ class CrimeListFragment:
         }
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
+            holder.bind(getItem(position))
+        }
+    }
+
+    private inner class CrimeListAdapterMVVM
+        : ListAdapter<Crime, CrimeHolderMVVM>(DiffCallback()) {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolderMVVM {
+            val binding = DataBindingUtil.inflate<ListItemCrimeBinding>(
+                layoutInflater,
+                R.layout.list_item_crime,
+                parent,
+                false
+            )
+
+            return CrimeHolderMVVM(binding)
+        }
+
+        override fun onBindViewHolder(holder: CrimeHolderMVVM, position: Int) {
             holder.bind(getItem(position))
         }
     }
