@@ -1,7 +1,7 @@
-package com.bignerdranch.android.criminalintent.ViewModel
+package com.bignerdranch.android.criminalintent.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.bignerdranch.android.criminalintent.Model.Crime
+import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.repository.CrimeRepository
 
 class CrimeListViewModel: ViewModel() {

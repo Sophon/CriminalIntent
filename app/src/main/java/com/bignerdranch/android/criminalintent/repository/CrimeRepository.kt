@@ -3,7 +3,7 @@ package com.bignerdranch.android.criminalintent.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.bignerdranch.android.criminalintent.Model.Crime
+import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.database.CrimeDatabase
 import com.bignerdranch.android.criminalintent.database.migration_1_2
 import java.io.File

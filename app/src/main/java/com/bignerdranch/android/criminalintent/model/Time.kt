@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent.Model
+package com.bignerdranch.android.criminalintent.model
 
 import java.io.Serializable
 import java.util.*

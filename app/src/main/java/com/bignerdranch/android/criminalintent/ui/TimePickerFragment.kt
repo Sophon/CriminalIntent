@@ -5,7 +5,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
-import com.bignerdranch.android.criminalintent.Model.Time
+import com.bignerdranch.android.criminalintent.model.Time
 import java.util.*
 
 private const val ARG_TIME = "time"

@@ -20,10 +20,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
 import com.bignerdranch.android.criminalintent.*
-import com.bignerdranch.android.criminalintent.Model.Crime
-import com.bignerdranch.android.criminalintent.Model.Time
-import com.bignerdranch.android.criminalintent.Utils.getScaledBitmap
-import com.bignerdranch.android.criminalintent.ViewModel.CrimeDetailViewModel
+import com.bignerdranch.android.criminalintent.model.Crime
+import com.bignerdranch.android.criminalintent.model.Time
+import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
+import com.bignerdranch.android.criminalintent.viewModel.CrimeDetailViewModel
 import java.io.File
 import java.util.*
 
