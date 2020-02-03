@@ -126,7 +126,6 @@ class CrimeListFragment:
 
     private fun updateUI(crimes: List<Crime>) {
         (binding.crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
-
     }
 
     private fun showEmptyDialog() {
