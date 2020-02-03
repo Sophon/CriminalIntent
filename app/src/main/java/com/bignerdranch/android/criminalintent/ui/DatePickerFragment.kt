@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -53,7 +53,8 @@ class DatePickerFragment: DialogFragment() {
                 putSerializable(ARG_DATE, date)
             }
 
-            return DatePickerFragment().apply {
+            return DatePickerFragment()
+                .apply {
                 arguments = argBundle
             }
         }

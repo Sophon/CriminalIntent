@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,6 +14,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.criminalintent.viewModel.CrimeListViewModel
+import com.bignerdranch.android.criminalintent.model.Crime
+import com.bignerdranch.android.criminalintent.R
+import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
+import com.bignerdranch.android.criminalintent.databinding.ListItemCrimeBinding
+import com.bignerdranch.android.criminalintent.viewModel.CrimeViewModel
 import java.util.*
 
 private const val TAG = "CrimeListFragment"
@@ -31,7 +38,7 @@ class CrimeListFragment:
     //==========
 
     private var callback: Callbacks? = null
-    private lateinit var crimeRecyclerView: RecyclerView
+    private lateinit var binding: FragmentCrimeListBinding
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this).get(CrimeListViewModel::class.java)
     }
@@ -58,13 +65,14 @@ class CrimeListFragment:
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+        binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
-        crimeRecyclerView = view.findViewById(R.id.crime_recycler_view)
-        crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-        crimeRecyclerView.adapter = CrimeListAdapter()
+        binding.crimeRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = CrimeListAdapter()
+        }
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,13 +125,18 @@ class CrimeListFragment:
     //==========
 
     private fun updateUI(crimes: List<Crime>) {
-        (crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
+        (binding.crimeRecyclerView.adapter as CrimeListAdapter).submitList(crimes)
     }
 
     private fun showEmptyDialog() {
-        EmptyAlertFragment.newInstance().apply {
-            setTargetFragment(this@CrimeListFragment, REQUEST_EMPTY)
-            show(this@CrimeListFragment.requireFragmentManager(), DIALOG_EMPTY)
+        EmptyAlertFragment.newInstance()
+            .apply {
+            setTargetFragment(this@CrimeListFragment,
+                REQUEST_EMPTY
+            )
+            show(this@CrimeListFragment.requireFragmentManager(),
+                DIALOG_EMPTY
+            )
         }
 
         crimeListViewModel.emptyDialogShown = true
@@ -146,54 +159,18 @@ class CrimeListFragment:
 
     //==========
 
-    private inner class CrimeHolder(view: View)
-        : RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        private lateinit var crime: Crime
-        private val titleTextView = itemView.findViewById<TextView>(R.id.crime_title)
-        private val dateTextView = itemView.findViewById<TextView>(R.id.crime_detail_date)
-        private val solvedImageView =
-            itemView.findViewById<ImageView>(R.id.crime_detail_solved)
+    private inner class CrimeHolder(private val binding: ListItemCrimeBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            callback?.onCrimeClicked(crime.id)
+            binding.viewModel = CrimeViewModel()
         }
 
         fun bind(crime: Crime) {
-            this.crime = crime
-
-            titleTextView.text = crime.title
-            dateTextView.text = getDateString(crime.date)
-            solvedImageView.visibility = if(crime.isSolved) {
-                View.VISIBLE
-            } else {
-                View.GONE
+            binding.apply {
+                viewModel?.crime = crime
+                executePendingBindings()
             }
-        }
-
-        fun getDateString(date: Date): String {
-            val calendar = Calendar.getInstance()
-            calendar.time = date
-
-            val dayOfWeek = calendar.getDisplayName(
-                Calendar.DAY_OF_WEEK,
-                Calendar.SHORT,
-                Locale.getDefault()
-            )
-
-            val formattedDate =
-                java.text.DateFormat
-                    .getDateTimeInstance(
-                        java.text.DateFormat.MEDIUM,
-                        java.text.DateFormat.SHORT
-                    )
-                    .format(date)
-
-            return "$dayOfWeek, $formattedDate"
         }
     }
 
@@ -201,9 +178,14 @@ class CrimeListFragment:
         : ListAdapter<Crime, CrimeHolder>(DiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-            val view =
-                layoutInflater.inflate(R.layout.list_item_crime, parent, false)
-            return CrimeHolder(view)
+            val binding = DataBindingUtil.inflate<ListItemCrimeBinding>(
+                layoutInflater,
+                R.layout.list_item_crime,
+                parent,
+                false
+            )
+
+            return CrimeHolder(binding)
         }
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
@@ -221,4 +203,6 @@ class CrimeListFragment:
             return oldItem == newItem
         }
     }
+
+
 }

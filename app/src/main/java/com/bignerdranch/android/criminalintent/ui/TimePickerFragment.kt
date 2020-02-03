@@ -1,10 +1,11 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import com.bignerdranch.android.criminalintent.model.Time
 import java.util.*
 
 private const val ARG_TIME = "time"
@@ -21,7 +22,8 @@ class TimePickerFragment: DialogFragment() {
         val timeListener = TimePickerDialog.OnTimeSetListener {
                 _: TimePicker, hour: Int, minute: Int ->
 
-            val resultTime = Time(hour, minute)
+            val resultTime =
+                Time(hour, minute)
 
             targetFragment?.let { fragment ->
                 (fragment as Callbacks).onTimeSelected(resultTime)
@@ -49,7 +51,8 @@ class TimePickerFragment: DialogFragment() {
                 putSerializable(ARG_TIME, time)
             }
 
-            return TimePickerFragment().apply {
+            return TimePickerFragment()
+                .apply {
                 arguments = argBundle
             }
         }

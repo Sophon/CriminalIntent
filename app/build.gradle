@@ -27,6 +27,10 @@ android {
             arg("room.schemeLocation", "$projectDir/schemas".toString())
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
