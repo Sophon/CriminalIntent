@@ -5,11 +5,9 @@ import androidx.databinding.Bindable
 import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.utils.getDateString
 
-class CrimeViewModel: BaseObservable() {
+class CrimeViewModel(private val crimeClickedFunction: (Crime) -> Unit = {}): BaseObservable() {
 
-    fun onCrimeClicked() {
-
-    }
+    fun onCrimeClicked() = crimeClickedFunction(crime!!)
 
     var crime: Crime? = null
         set(crime) {

@@ -159,11 +159,13 @@ class CrimeListFragment:
 
     //==========
 
-    private inner class CrimeHolder(private val binding: ListItemCrimeBinding)
-        : RecyclerView.ViewHolder(binding.root) {
+    private inner class CrimeHolder(
+        private val binding: ListItemCrimeBinding,
+        onCrimeClicked: (Crime) -> Unit = {}
+    ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.viewModel = CrimeViewModel()
+            binding.viewModel = CrimeViewModel(onCrimeClicked)
         }
 
         fun bind(crime: Crime) {
@@ -177,6 +179,10 @@ class CrimeListFragment:
     private inner class CrimeListAdapter
         : ListAdapter<Crime, CrimeHolder>(DiffCallback()) {
 
+        private val onCrimeClicked: (Crime) -> Unit = { crime ->
+            callback?.onCrimeClicked(crime.id)
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
             val binding = DataBindingUtil.inflate<ListItemCrimeBinding>(
                 layoutInflater,
@@ -185,7 +191,7 @@ class CrimeListFragment:
                 false
             )
 
-            return CrimeHolder(binding)
+            return CrimeHolder(binding, onCrimeClicked)
         }
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
@@ -203,6 +209,5 @@ class CrimeListFragment:
             return oldItem == newItem
         }
     }
-
 
 }
