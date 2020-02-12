@@ -1,8 +1,9 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import com.bignerdranch.android.criminalintent.model.Crime
 import com.bignerdranch.android.criminalintent.database.CrimeDatabase
 import com.bignerdranch.android.criminalintent.database.migration_1_2
 import java.io.File
@@ -55,12 +56,16 @@ class CrimeRepository private constructor(context: Context) {
 
         fun initialize(context: Context) {
             if(INSTANCE == null) {
-                INSTANCE = CrimeRepository(context)
+                INSTANCE =
+                    CrimeRepository(
+                        context
+                    )
             }
         }
 
         fun get(): CrimeRepository {
-            return INSTANCE ?:
+            return INSTANCE
+                ?:
                 throw IllegalStateException("CrimeRepository must be initialized!")
         }
     }

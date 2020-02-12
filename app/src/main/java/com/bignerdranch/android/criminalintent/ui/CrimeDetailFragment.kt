@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -19,6 +19,12 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
+import com.bignerdranch.android.criminalintent.*
+import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
+import com.bignerdranch.android.criminalintent.model.Crime
+import com.bignerdranch.android.criminalintent.model.Time
+import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
+import com.bignerdranch.android.criminalintent.viewModel.CrimeDetailViewModel
 import java.io.File
 import java.util.*
 
@@ -43,14 +49,7 @@ class CrimeDetailFragment:
     private lateinit var photoFile: File
     private lateinit var photoFileUri: Uri
 
-    private lateinit var photoView: ImageView
-    private lateinit var photoButton: ImageButton
-    private lateinit var titleField: EditText
-    private lateinit var dateButton: Button
-    private lateinit var isSolvedCheckbox: CheckBox
-    private lateinit var sendReportButton: Button
-    private lateinit var chooseSuspectButton: Button
-
+    private lateinit var binding: FragmentCrimeDetailBinding
 
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders
@@ -74,19 +73,9 @@ class CrimeDetailFragment:
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentCrimeDetailBinding.inflate(inflater, container, false)
 
-        val view =
-            inflater.inflate(R.layout.fragment_crime_detail, container, false)
-
-        photoView = view.findViewById(R.id.crime_detail_photo)
-        photoButton = view.findViewById(R.id.crime_detail_camera)
-        titleField = view.findViewById(R.id.crime_title)
-        dateButton = view.findViewById(R.id.crime_detail_date)
-        isSolvedCheckbox = view.findViewById(R.id.crime_detail_solved)
-        sendReportButton = view.findViewById(R.id.crime_detail_send_report)
-        chooseSuspectButton = view.findViewById(R.id.crime_detail_choose_suspect)
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -114,11 +103,17 @@ class CrimeDetailFragment:
     override fun onStart() {
         super.onStart()
 
-        photoView.setOnClickListener {
+        binding.crimeDetailPhoto.setOnClickListener {
             if(photoFile.exists()) {
-                ImageFragment.newInstance(photoFile).apply {
-                    setTargetFragment(this@CrimeDetailFragment, REQUEST_IMAGE)
-                    show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_IMAGE)
+                ImageFragment.newInstance(
+                    photoFile
+                ).apply {
+                    setTargetFragment(this@CrimeDetailFragment,
+                        REQUEST_IMAGE
+                    )
+                    show(this@CrimeDetailFragment.requireFragmentManager(),
+                        DIALOG_IMAGE
+                    )
                 }
             } else {
                 Toast.makeText(
@@ -129,7 +124,7 @@ class CrimeDetailFragment:
             }
         }
 
-        photoButton.apply {
+        binding.crimeDetailCamera.apply {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
             val packageManager: PackageManager = requireActivity().packageManager
@@ -158,7 +153,9 @@ class CrimeDetailFragment:
                     )
                 }
 
-                startActivityForResult(takePhotoIntent, REQUEST_CAMERA)
+                startActivityForResult(takePhotoIntent,
+                    REQUEST_CAMERA
+                )
             }
         }
 
@@ -179,9 +176,10 @@ class CrimeDetailFragment:
 
             override fun afterTextChanged(s: Editable?) { }
         }
-        titleField.addTextChangedListener(titleWatcher)
 
-        isSolvedCheckbox.apply {
+        binding.crimeTitle.addTextChangedListener(titleWatcher)
+
+        binding.crimeDetailSolved.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
                 contentDescription = if(crime.isSolved) {
@@ -192,14 +190,20 @@ class CrimeDetailFragment:
             }
         }
 
-        dateButton.setOnClickListener {
-            DatePickerFragment.newInstance(crime.date).apply {
-                setTargetFragment(this@CrimeDetailFragment, REQUEST_DATE)
-                show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_DATE)
+        binding.crimeDetailDate.setOnClickListener {
+            DatePickerFragment.newInstance(
+                crime.date
+            ).apply {
+                setTargetFragment(this@CrimeDetailFragment,
+                    REQUEST_DATE
+                )
+                show(this@CrimeDetailFragment.requireFragmentManager(),
+                    DIALOG_DATE
+                )
             }
         }
 
-        chooseSuspectButton.apply {
+        binding.crimeDetailChooseSuspect.apply {
             val chooseSuspectIntent = Intent(
                 Intent.ACTION_PICK,
                 ContactsContract.Contacts.CONTENT_URI
@@ -216,11 +220,13 @@ class CrimeDetailFragment:
             }
 
             setOnClickListener {
-                startActivityForResult(chooseSuspectIntent, REQUEST_CONTACT)
+                startActivityForResult(chooseSuspectIntent,
+                    REQUEST_CONTACT
+                )
             }
         }
 
-        sendReportButton.setOnClickListener {
+        binding.crimeDetailSendReport.setOnClickListener {
             Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
 
@@ -272,7 +278,7 @@ class CrimeDetailFragment:
                 }
 
                 crimeDetailViewModel.saveCrime(crime)
-                chooseSuspectButton.text = crime.suspect
+                binding.crimeDetailChooseSuspect.text = crime.suspect
             }
 
             requestCode == REQUEST_CAMERA -> {
@@ -285,9 +291,15 @@ class CrimeDetailFragment:
     override fun onDateSelected(date: Date) {
         crime.date = date
 
-        TimePickerFragment.newInstance(Time.dateToTime(crime.date)).apply {
-            setTargetFragment(this@CrimeDetailFragment, REQUEST_TIME)
-            show(this@CrimeDetailFragment.requireFragmentManager(), DIALOG_TIME)
+        TimePickerFragment.newInstance(
+            Time.dateToTime(crime.date)
+        ).apply {
+            setTargetFragment(this@CrimeDetailFragment,
+                REQUEST_TIME
+            )
+            show(this@CrimeDetailFragment.requireFragmentManager(),
+                DIALOG_TIME
+            )
         }
     }
 
@@ -300,9 +312,9 @@ class CrimeDetailFragment:
     //==========
 
     private fun updateUI() {
-        titleField.setText(crime.title)
+        binding.crimeTitle.setText(crime.title)
 
-        dateButton.text =
+        binding.crimeDetailDate.text =
             java.text.DateFormat
                 .getDateTimeInstance(
                     java.text.DateFormat.LONG,
@@ -310,13 +322,13 @@ class CrimeDetailFragment:
                 )
                 .format(crime.date)
 
-        isSolvedCheckbox.apply {
+        binding.crimeDetailSolved.apply {
             isChecked = crime.isSolved
             jumpDrawablesToCurrentState()
         }
 
         if(crime.suspect.isNotEmpty()) {
-            chooseSuspectButton.text = crime.suspect
+            binding.crimeDetailChooseSuspect.text = crime.suspect
         }
 
         updatePhotoView()
@@ -351,13 +363,17 @@ class CrimeDetailFragment:
 
     private fun updatePhotoView() {
         if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            photoView.setImageBitmap(bitmap)
-            photoView.contentDescription =
+            val bitmap =
+                getScaledBitmap(
+                    photoFile.path,
+                    requireActivity()
+                )
+            binding.crimeDetailPhoto.setImageBitmap(bitmap)
+            binding.crimeDetailPhoto.contentDescription =
                 getString(R.string.crime_photo_image_description)
         } else {
-            photoView.setImageDrawable(null)
-            photoView.contentDescription =
+            binding.crimeDetailPhoto.setImageDrawable(null)
+            binding.crimeDetailPhoto.contentDescription =
                 getString(R.string.crime_photo_no_image_description)
         }
     }
@@ -371,7 +387,8 @@ class CrimeDetailFragment:
                 putSerializable(ARG_CRIME_ID, crimeId)
             }
 
-            return CrimeDetailFragment().apply {
+            return CrimeDetailFragment()
+                .apply {
                 arguments = argBundle
             }
         }

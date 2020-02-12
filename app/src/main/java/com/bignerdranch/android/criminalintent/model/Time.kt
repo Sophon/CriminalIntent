@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent
+package com.bignerdranch.android.criminalintent.model
 
 import java.io.Serializable
 import java.util.*
@@ -14,7 +14,8 @@ class Time(
 
             return Time(
                 calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE))
+                calendar.get(Calendar.MINUTE)
+            )
         }
 
         fun addTimeToDate(date: Date, time: Time): Date {
