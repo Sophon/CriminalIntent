@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent.ui
+package com.bignerdranch.android.criminalintent.crimeDetail
 
 import android.app.Dialog
 import android.os.Bundle
