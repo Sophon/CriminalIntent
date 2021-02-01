@@ -270,7 +270,7 @@ class CrimeDetailFragment:
     private fun setupCameraButton(photoFile: File) {
         val photoFileUri = FileProvider.getUriForFile(
             requireActivity(),
-            "com.example.listbrowser.fileprovider",
+            "com.bignerdranch.android.criminalintent.fileprovider",
             photoFile
         )
 
