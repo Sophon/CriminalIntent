@@ -2,38 +2,44 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bignerdranch.android.criminalintent.notif.CrimeDetailFragment
-import com.bignerdranch.android.criminalintent.notif.CrimeListFragment
+import com.bignerdranch.android.criminalintent.crimeDetail.CrimeFragment
+import com.bignerdranch.android.criminalintent.crimeList.CrimeListFragment
 import java.util.*
 
 class MainActivity:
     AppCompatActivity(),
-    CrimeListFragment.Callbacks {
+    CrimeListFragment.Callbacks
+{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val currentFragment
-                = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if(currentFragment == null) {
-            val fragment = CrimeListFragment.newInstance()
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, fragment)
-                .commit()
-        }
+        displayCrimeList()
     }
 
-    //==========
-
     override fun onCrimeClicked(crimeId: UUID) {
-        val crimeFragment = CrimeDetailFragment.newInstance(crimeId)
-
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, crimeFragment)
-            .addToBackStack("crime")
+            .replace(R.id.frame_main, CrimeFragment.getExistingCrimeInstance(crimeId))
+            .addToBackStack(null)
             .commit()
+    }
+
+    override fun onAddCrime() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_main, CrimeFragment.getNewCrimeInstance())
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun displayCrimeList() {
+        if(supportFragmentManager.findFragmentById(R.id.frame_main) == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.frame_main, CrimeListFragment.getInstance())
+                .commit()
+        }
     }
 }

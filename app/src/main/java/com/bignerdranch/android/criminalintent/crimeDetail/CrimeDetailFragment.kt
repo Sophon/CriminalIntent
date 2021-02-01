@@ -357,11 +357,10 @@ class CrimeFragment:
 
     private fun setupObservers() {
         vm.exitFragmentEvent.observe(
-            viewLifecycleOwner,
-            {
-                requireActivity().onBackPressed()
-            }
-        )
+            viewLifecycleOwner
+        ) {
+            requireActivity().onBackPressed()
+        }
 
         vm.cachedCrime.observe(
             viewLifecycleOwner
