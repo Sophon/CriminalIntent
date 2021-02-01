@@ -17,17 +17,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
-import com.example.listbrowser.crimeDetail.CrimeDetailVM
 import java.io.File
 import java.util.*
 
 private const val DIALOG_DATE = "dialog date"
 private const val ARG_CRIME_ID = "crime id"
+private const val DIALOG_IMAGE = "DialogImage"
 private const val REQUEST_DATE = 0
 private const val REQUEST_CONTACTS = 1
 private const val REQUEST_CAMERA = 2
+private const val REQUEST_IMAGE = 3
 
-class CrimeFragment:
+
+class CrimeDetailFragment:
     DatePickerFragment.Callbacks,
     Fragment()
 {
@@ -66,6 +68,7 @@ class CrimeFragment:
         setupSaveButton()
         setupSuspectButton()
         setupReportButton()
+        setupImageButton()
 
         setupObservers()
     }
@@ -182,9 +185,9 @@ class CrimeFragment:
             DatePickerFragment
                 .getInstance(vm.cachedCrime.value?.date ?: Date())
                 .apply {
-                    setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                    setTargetFragment(this@CrimeDetailFragment, REQUEST_DATE)
                     show(
-                        this@CrimeFragment.parentFragmentManager,
+                        this@CrimeDetailFragment.parentFragmentManager,
                         DIALOG_DATE
                     )
                 }
@@ -318,6 +321,30 @@ class CrimeFragment:
         }
     }
 
+    private fun setupImageButton() {
+        binding.imgCrime.setOnClickListener {
+            val photoFile = vm.getCrimePhoto()
+            if(photoFile != null && photoFile.exists()) {
+                ImageFragment.newInstance(
+                    photoFile
+                ).apply {
+                    setTargetFragment(this@CrimeDetailFragment,
+                        REQUEST_IMAGE
+                    )
+                    show(this@CrimeDetailFragment.requireFragmentManager(),
+                        DIALOG_IMAGE
+                    )
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "no photo available",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
     private fun updateUI(photoFile: File? = null) {
         binding.apply {
             vm.cachedCrime.value?.let { crime ->
@@ -379,21 +406,21 @@ class CrimeFragment:
     }
 
     companion object {
-        fun getExistingCrimeInstance(crimeId: UUID): CrimeFragment {
+        fun getExistingCrimeInstance(crimeId: UUID): CrimeDetailFragment {
             val args = Bundle().apply {
                 putSerializable(
                     ARG_CRIME_ID,
                     crimeId
                 )
             }
-            return CrimeFragment()
+            return CrimeDetailFragment()
                 .apply {
                     arguments = args
                 }
         }
 
-        fun getNewCrimeInstance(): CrimeFragment {
-            return CrimeFragment()
+        fun getNewCrimeInstance(): CrimeDetailFragment {
+            return CrimeDetailFragment()
         }
     }
 }

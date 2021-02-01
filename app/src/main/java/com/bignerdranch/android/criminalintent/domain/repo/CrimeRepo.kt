@@ -6,6 +6,7 @@ import com.bignerdranch.android.criminalintent.domain.db.CrimeDB
 import com.bignerdranch.android.criminalintent.domain.model.Crime
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
+import java.io.File
 import java.lang.IllegalStateException
 import java.util.*
 
@@ -31,6 +32,12 @@ class CrimeRepository private constructor(context: Context) {
     suspend fun addCrime(crime: Crime) = dao.addCrime(crime)
 
     suspend fun deleteCrime(crime: Crime) = dao.deleteCrime(crime)
+
+    fun getPhotoFile(crime: Crime?): File? {
+        return crime?.let {
+            File(filesDir, crime.photoFileName)
+        }
+    }
 
     companion object {
         private var INSTANCE: CrimeRepository? = null

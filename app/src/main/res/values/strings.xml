@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ListBrowser</string>
+    <string name="app_name">CriminalIntent</string>
 
     <string name="fragment_crime_checkbox_solved">Solved</string>
     <string name="fragment_crime_textv_title">Title</string>

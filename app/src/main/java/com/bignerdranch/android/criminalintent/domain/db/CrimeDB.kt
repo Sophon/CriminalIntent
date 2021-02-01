@@ -8,7 +8,6 @@ import com.bignerdranch.android.criminalintent.domain.model.Crime
 
 @Database(
     entities = [ Crime::class ],
-    exportSchema = true,
     version = 1
 )
 @TypeConverters(CrimeTypeConverters::class)

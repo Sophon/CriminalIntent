@@ -2,7 +2,7 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bignerdranch.android.criminalintent.crimeDetail.CrimeFragment
+import com.bignerdranch.android.criminalintent.crimeDetail.CrimeDetailFragment
 import com.bignerdranch.android.criminalintent.crimeList.CrimeListFragment
 import java.util.*
 
@@ -21,7 +21,7 @@ class MainActivity:
     override fun onCrimeClicked(crimeId: UUID) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame_main, CrimeFragment.getExistingCrimeInstance(crimeId))
+            .replace(R.id.frame_main, CrimeDetailFragment.getExistingCrimeInstance(crimeId))
             .addToBackStack(null)
             .commit()
     }
@@ -29,7 +29,7 @@ class MainActivity:
     override fun onAddCrime() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.frame_main, CrimeFragment.getNewCrimeInstance())
+            .replace(R.id.frame_main, CrimeDetailFragment.getNewCrimeInstance())
             .addToBackStack(null)
             .commit()
     }

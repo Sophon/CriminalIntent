@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.bignerdranch.android.criminalintent.R
-import com.bignerdranch.android.criminalintent.utils.getScaledBitmap
 import java.io.File
 
 private const val ARG_FILE = "file"
@@ -13,8 +12,6 @@ private const val ARG_FILE = "file"
 class ImageFragment: DialogFragment() {
 
     private lateinit var photoView: ImageView
-
-    //==========
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val photoFile = arguments?.getSerializable(ARG_FILE) as File
@@ -37,8 +34,6 @@ class ImageFragment: DialogFragment() {
 
         return dialog
     }
-
-    //==========
 
     companion object {
 

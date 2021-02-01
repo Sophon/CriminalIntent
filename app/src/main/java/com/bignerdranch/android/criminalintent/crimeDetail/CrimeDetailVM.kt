@@ -1,4 +1,4 @@
-package com.example.listbrowser.crimeDetail
+package com.bignerdranch.android.criminalintent.crimeDetail
 
 import androidx.lifecycle.*
 import com.bignerdranch.android.criminalintent.arch.LiveEvent
@@ -6,6 +6,7 @@ import com.bignerdranch.android.criminalintent.domain.repo.CrimeRepository
 import com.bignerdranch.android.criminalintent.domain.model.Crime
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 class CrimeDetailVM: ViewModel() {
@@ -61,6 +62,10 @@ class CrimeDetailVM: ViewModel() {
         }
 
         exitFragmentEvent.postValue(Any())
+    }
+
+    fun getCrimePhoto(): File? {
+        return repo.getPhotoFile(cachedCrime.value)
     }
 
     //region Crime edit
