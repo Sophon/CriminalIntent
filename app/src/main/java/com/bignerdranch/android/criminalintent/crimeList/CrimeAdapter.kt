@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.listbrowser.databinding.ItemCrimeBinding
-import com.example.listbrowser.domain.model.Crime
+import com.bignerdranch.android.criminalintent.domain.model.Crime
 import java.util.*
 
 class CrimeAdapter(

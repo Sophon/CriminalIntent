@@ -3,9 +3,9 @@ package com.bignerdranch.android.criminalintent.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.bignerdranch.android.criminalintent.model.Crime
-import com.bignerdranch.android.criminalintent.database.CrimeDatabase
-import com.bignerdranch.android.criminalintent.database.migration_1_2
+import com.bignerdranch.android.criminalintent.domain.model.Crime
+import com.bignerdranch.android.criminalintent.domain.db.CrimeDatabase
+import com.bignerdranch.android.criminalintent.domain.db.migration_1_2
 import java.io.File
 import java.lang.IllegalStateException
 import java.util.*

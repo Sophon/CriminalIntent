@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
-import com.example.listbrowser.domain.model.Crime
+import com.bignerdranch.android.criminalintent.domain.model.Crime
 import java.util.*
 
 class CrimeListFragment: Fragment() {

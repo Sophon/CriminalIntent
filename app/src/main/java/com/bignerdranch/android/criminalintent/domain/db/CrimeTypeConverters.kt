@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent.database
+package com.bignerdranch.android.criminalintent.domain.db
 
 import androidx.room.TypeConverter
 import java.util.*
@@ -6,22 +6,24 @@ import java.util.*
 class CrimeTypeConverters {
 
     @TypeConverter
-    fun fromUUID(uuid: UUID?): String? {
-        return uuid?.toString()
-    }
-    @TypeConverter
-    fun toUUID(uuid: String?): UUID? {
-        return UUID.fromString(uuid)
-    }
-
-    @TypeConverter
     fun fromDate(date: Date?): Long? {
         return date?.time
     }
+
     @TypeConverter
     fun toDate(millisSinceEpoch: Long?): Date? {
         return millisSinceEpoch?.let {
             Date(it)
         }
+    }
+
+    @TypeConverter
+    fun fromUUID(uuid: UUID?): String? {
+        return uuid?.toString()
+    }
+
+    @TypeConverter
+    fun toUUID(idString: String?): UUID? {
+        return UUID.fromString(idString)
     }
 }

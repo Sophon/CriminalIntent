@@ -3,7 +3,7 @@ package com.bignerdranch.android.criminalintent.crimeList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.listbrowser.domain.model.Crime
+import com.bignerdranch.android.criminalintent.domain.model.Crime
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 

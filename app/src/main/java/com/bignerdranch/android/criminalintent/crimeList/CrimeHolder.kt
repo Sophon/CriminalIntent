@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listbrowser.R
 import com.example.listbrowser.databinding.ItemCrimeBinding
-import com.example.listbrowser.domain.model.Crime
+import com.bignerdranch.android.criminalintent.domain.model.Crime
 import java.text.SimpleDateFormat
 import java.util.*
 

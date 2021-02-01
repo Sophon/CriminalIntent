@@ -14,7 +14,9 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
+import com.example.listbrowser.crimeDetail.CrimeDetailVM
 import java.io.File
 import java.util.*
 
