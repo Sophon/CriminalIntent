@@ -1,9 +1,10 @@
 package com.example.listbrowser.crimeDetail
 
 import androidx.lifecycle.*
-import com.example.listbrowser.arch.LiveEvent
+import com.bignerdranch.android.criminalintent.arch.LiveEvent
 import com.bignerdranch.android.criminalintent.domain.repo.CrimeRepository
 import com.bignerdranch.android.criminalintent.domain.model.Crime
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 

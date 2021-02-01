@@ -1,4 +1,4 @@
-package com.bignerdranch.android.criminalintent.ui
+package com.bignerdranch.android.criminalintent.notif
 
 import android.app.AlertDialog
 import android.app.Dialog
