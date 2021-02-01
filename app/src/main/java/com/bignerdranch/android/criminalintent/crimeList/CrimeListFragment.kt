@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeListBinding
@@ -98,11 +99,10 @@ class CrimeListFragment: Fragment() {
 
     private fun setupObservers() {
         vm.crimesLiveData.observe(
-            viewLifecycleOwner,
-            { crimes ->
-                updateList(crimes)
-            }
-        )
+            viewLifecycleOwner
+        ) { crimes ->
+            updateList(crimes)
+        }
     }
 
     companion object {

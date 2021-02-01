@@ -3,8 +3,8 @@ package com.bignerdranch.android.criminalintent.crimeList
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listbrowser.R
-import com.example.listbrowser.databinding.ItemCrimeBinding
+import com.bignerdranch.android.criminalintent.R
+import com.bignerdranch.android.criminalintent.databinding.ItemCrimeBinding
 import com.bignerdranch.android.criminalintent.domain.model.Crime
 import java.text.SimpleDateFormat
 import java.util.*

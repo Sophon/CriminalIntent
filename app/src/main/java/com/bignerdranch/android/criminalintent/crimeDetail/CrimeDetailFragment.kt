@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import com.bignerdranch.android.criminalintent.R
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import com.example.listbrowser.crimeDetail.CrimeDetailVM
@@ -363,21 +364,19 @@ class CrimeFragment:
         )
 
         vm.cachedCrime.observe(
-            viewLifecycleOwner,
-            { crime ->
-                crime.getPhotoFile(requireActivity()).let { photoFile ->
-                    updateUI(photoFile)
-                    setupCameraButton(photoFile)
-                }
+            viewLifecycleOwner
+        ) { crime ->
+            crime.getPhotoFile(requireActivity()).let { photoFile ->
+                updateUI(photoFile)
+                setupCameraButton(photoFile)
             }
-        )
+        }
 
         vm.canSaveCrime.observe(
-            viewLifecycleOwner,
-            { canSave ->
-                binding.btnSave.isEnabled = canSave
-            }
-        )
+            viewLifecycleOwner
+        ) { canSave ->
+            binding.btnSave.isEnabled = canSave
+        }
     }
 
     companion object {

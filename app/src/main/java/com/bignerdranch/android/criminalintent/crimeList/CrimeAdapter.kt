@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.listbrowser.databinding.ItemCrimeBinding
+import com.bignerdranch.android.criminalintent.databinding.ItemCrimeBinding
 import com.bignerdranch.android.criminalintent.domain.model.Crime
 import java.util.*
 
