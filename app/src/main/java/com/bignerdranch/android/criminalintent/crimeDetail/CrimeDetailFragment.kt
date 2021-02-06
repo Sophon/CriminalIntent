@@ -126,7 +126,7 @@ class CrimeDetailFragment:
             }
 
             requestCode == REQUEST_CAMERA -> {
-                updateUI()
+                updateUI(vm.getCrimePhoto())
             }
         }
     }
@@ -292,12 +292,6 @@ class CrimeDetailFragment:
             }
 
             setOnClickListener {
-                Toast.makeText(
-                    requireContext(),
-                    "launching camera",
-                    Toast.LENGTH_SHORT
-                ).show()
-
                 cameraIntent.putExtra(
                     MediaStore.EXTRA_OUTPUT,
                     photoFileUri
